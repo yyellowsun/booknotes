@@ -1,4 +1,4 @@
-git初始化：git init 
+### git初始化：git init 
 
 git remote add origin git@github.com:yyellowsun/test.git
 
@@ -10,7 +10,7 @@ git push -u origin master
 
 
 
-把远程库的内容拉到本地
+### 把远程库的内容拉到本地
 
 git pull -r remote local
 
@@ -22,7 +22,7 @@ git pull所做的东西：1、git fetch remote-repo
 
 
 
-使用git rebase合并commit
+### 使用git rebase合并commit
 
 使用git reset --hard commitID 来回退到指定版本
 
@@ -30,3 +30,7 @@ git pull所做的东西：1、git fetch remote-repo
 
 --soft:在本地保留改动，丢掉commit
 
+### 使用git remote add upstream xxx
+git remote add upstream  为本地fork的库添加远程库
+git remote remove upstream
+git fetch upstream 从远程库捕获
