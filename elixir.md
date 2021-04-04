@@ -2,7 +2,15 @@ OTP的理解：
 
 OTP：open telephone platform
 
-对于
+OTP就是client api,server callbacks,helper functions三个部分，
+
+client api就是供用户调用的函数接口，函数间接调用GenServer的各种接口来调用server callbacks部分的函数
+
+server callbacks就是对GenServer的各种接口的具体实现，控制着GenServer的创建，终结，如何处理各种从client接收到的信息。其中handle_call和handle_cast的区别在于，handle_call是对client需要有反馈的同步调用，handle_Cast是对client不需要反馈的异步调用。关于异步和同步调用其实还是有点困惑。。
+
+
+
+helper functions是各种功能逻辑函数
 
 
 
@@ -100,7 +108,7 @@ after是可选字段，可选值为
 
 send(dest,message)
 
-向dest，发送message，返回值为message。一般会在message里面包含发送者的pidl例如send(dest,{sender_pid,message})这样用
+向dest，发送message，返回值为message。一般会在message里面包含发送者的pid例如send(dest,{sender_pid,message})这样用
 
 dest可选值为
 
@@ -111,3 +119,35 @@ dest可选值为
 3、局部已经注册的名字
 
 4、{registered_name,node}在另一个node注册的名字
+
+
+
+Process.link/1，将当前进程与一个指定进程链接起来，链接之后的链接关系是双向的，每个linked process都有一个link set,通过Process.info/2(pid, :links)来查看，当一个进程crash，link set里面的所有进程都会crash
+
+接收到error signal的进程需要trap exit signals才不会die
+
+Process.flag(:trap_exit, true)使得一个普通进程变为系统进程
+
+系统进程可以将error signal变为类似于{:EXIT, pid, reason}的消息，pid是die的进程，reason是die的原因。
+
+spawn_link/3()是一个原子操作，将spawn和link放在一个步骤上面
+
+
+
+：exit的三种形式
+
+1、normal 情况下的exit
+
+{:EXIT, pid, :normal}，进程正常状态下的exit,
+
+A进程和B进程link了，当B进程正常状态下exit了，A进程不会die
+
+2、crash情况下的exit
+
+{:EXIT, pid, crash_reason}
+
+3、强制杀死一个进程的exit
+
+Process.exit(pid, :kill) 发送一个无法捕获的信号给pid
+
+系统进程也许可以捕获error signal例如：Process.exit(pid, :whoops)无法杀死一个系统进程，因为系统进程可以捕获这个sinal，但是Process.exit(pid, :kill)系统进程无法捕获，也会被强制kill
