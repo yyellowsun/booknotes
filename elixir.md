@@ -150,4 +150,30 @@ A进程和B进程link了，当B进程正常状态下exit了，A进程不会die
 
 Process.exit(pid, :kill) 发送一个无法捕获的信号给pid
 
+
+
 系统进程也许可以捕获error signal例如：Process.exit(pid, :whoops)无法杀死一个系统进程，因为系统进程可以捕获这个sinal，但是Process.exit(pid, :kill)系统进程无法捕获，也会被强制kill
+
+系统进程的link set中有进程exit时，系统进程可以捕获exit的消息，会收到{:EXIT, pid, reason}
+
+普通进程的link set中有进程exit时，1、linked process正常EXIT，普通进程不会有反应 
+
+2、killed by Process.exit(pid, :kill)或者Process.exit(pid, :other)，终端会显示:killed  or other，普通进程同时也会exit
+
+一般来说，无法trap exit的进程，当link set中有进程exit时，它自己也会exit.
+
+
+
+Process.monitor 与Process.link不同，Process.monitor可以monitor一个died process
+
+
+
+OTP的supervisor 中的进程假设使用spawn_link创建进程
+
+
+
+let it crash 的含义是让supervisor去捕获和处理错误，不要写一些太过防御性的代码
+
+
+
+​								  
