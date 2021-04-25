@@ -1,0 +1,43 @@
+k8s基本模型：
+
+master,node,cluster，pod，service
+一个node里面有多个pod
+一个node有一个唯一的ID地址
+pod的性质：
+唯一的IP地址，一个自动配置的端点
+运行在私有，独立的网络
+通过代理访问集群网络
+k8s集群里面的node和pod可以互相访问，外面的网络无法访问
+
+每个pod共享存储当作卷，
+共享网络，唯一的集群IP地址
+每个容器如何运行的信息
+
+service通过YAML或者json来定义，定义了pod的逻辑集和访问协议
+通过labelselector来标记一组pod
+
+service是什么？访问pod对象的协议的集合
+通过标记type的方式来匹配一组pod，需要Label(附加在对象上的key-value)
+和Selector
+
+如何设置代理
+
+
+kubectl create deployment +deployment name +镜像应用的location
+
+
+kubectl get - 列出资源
+kubectl describe - 显示有关资源的详细信息
+kubectl logs - 打印 pod 和其中容器的日志
+kubectl exec - 在 pod 中的容器上执行命令
+
+如何直接在容器里面执行命令？
+运行bash
+
+
+K8S 我准备几个问题给你们：
+* K8S的资源分配算法可以自己指定吗？分别有哪些？
+* 外部是通过什么跟pod来交流的？
+* pod内部是怎么交流的？
+* K8S可以做到根据QPS（访问量）来自动扩缩容吗？需要编写策略吗？
+
